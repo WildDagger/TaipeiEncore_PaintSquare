@@ -30,7 +30,7 @@ const POLICIES = [
 ];
 // 等級代碼只在程式和 localStorage 裡使用，畫面上顯示的是市民的反應
 const GRADE_LABELS = {
-  'SS+': '你是神啊？',
+  'SS+': '你是神嗎？',
   'SS': '非常滿意',
   'S': '滿意',
   'A': '還算滿意',
