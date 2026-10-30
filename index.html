@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>讓台北「5」夠安可！一起創造屬於你的台北色彩</title>
+<meta name="description" content="支持者自製的台北市地圖填色小遊戲，以 Taipei N.E.W.S. 政見為主題。非官方競選網站。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="preload" href="fonts/TASAExplorer-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div>
+      <p class="eyebrow">TAIPEI N.E.W.S.</p>
+      <h1>創造屬於你的台北色彩！</h1>
+    </div>
+    <span class="tag">支持者自製・非官方</span>
+  </header>
+
+  <section class="hud" aria-label="遊戲狀態">
+    <div class="stat time" id="timeStat"><span class="label">剩餘秒數</span><span class="value" id="timeVal">60</span></div>
+    <div class="stat"><span class="label">點擊次數</span><span class="value" id="stepVal">0</span></div>
+    <div class="stat"><span class="label">市民滿意度</span><span class="value grade-value" id="gradeVal">–</span></div>
+  </section>
+
+  <div class="board-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 576" id="board" data-rows="12" data-cols="10" data-cells="63">
+      <g id="blank">
+        <rect class="blank" x="0" y="0" width="48" height="48" data-r="0" data-c="0"/>
+        <rect class="blank" x="48" y="0" width="48" height="48" data-r="0" data-c="1"/>
+        <rect class="blank" x="96" y="0" width="48" height="48" data-r="0" data-c="2"/>
+        <rect class="blank" x="144" y="0" width="48" height="48" data-r="0" data-c="3"/>
+        <rect class="blank" x="288" y="0" width="48" height="48" data-r="0" data-c="6"/>
+        <rect class="blank" x="336" y="0" width="48" height="48" data-r="0" data-c="7"/>
+        <rect class="blank" x="384" y="0" width="48" height="48" data-r="0" data-c="8"/>
+        <rect class="blank" x="432" y="0" width="48" height="48" data-r="0" data-c="9"/>
+        <rect class="blank" x="0" y="48" width="48" height="48" data-r="1" data-c="0"/>
+        <rect class="blank" x="48" y="48" width="48" height="48" data-r="1" data-c="1"/>
+        <rect class="blank" x="96" y="48" width="48" height="48" data-r="1" data-c="2"/>
+        <rect class="blank" x="288" y="48" width="48" height="48" data-r="1" data-c="6"/>
+        <rect class="blank" x="336" y="48" width="48" height="48" data-r="1" data-c="7"/>
+        <rect class="blank" x="384" y="48" width="48" height="48" data-r="1" data-c="8"/>
+        <rect class="blank" x="432" y="48" width="48" height="48" data-r="1" data-c="9"/>
+        <rect class="blank" x="0" y="96" width="48" height="48" data-r="2" data-c="0"/>
+        <rect class="blank" x="48" y="96" width="48" height="48" data-r="2" data-c="1"/>
+        <rect class="blank" x="336" y="96" width="48" height="48" data-r="2" data-c="7"/>
+        <rect class="blank" x="384" y="96" width="48" height="48" data-r="2" data-c="8"/>
+        <rect class="blank" x="432" y="96" width="48" height="48" data-r="2" data-c="9"/>
+        <rect class="blank" x="0" y="144" width="48" height="48" data-r="3" data-c="0"/>
+        <rect class="blank" x="384" y="144" width="48" height="48" data-r="3" data-c="8"/>
+        <rect class="blank" x="432" y="144" width="48" height="48" data-r="3" data-c="9"/>
+        <rect class="blank" x="336" y="192" width="48" height="48" data-r="4" data-c="7"/>
+        <rect class="blank" x="384" y="192" width="48" height="48" data-r="4" data-c="8"/>
+        <rect class="blank" x="432" y="192" width="48" height="48" data-r="4" data-c="9"/>
+        <rect class="blank" x="0" y="240" width="48" height="48" data-r="5" data-c="0"/>
+        <rect class="blank" x="384" y="240" width="48" height="48" data-r="5" data-c="8"/>
+        <rect class="blank" x="432" y="240" width="48" height="48" data-r="5" data-c="9"/>
+        <rect class="blank" x="0" y="288" width="48" height="48" data-r="6" data-c="0"/>
+        <rect class="blank" x="48" y="288" width="48" height="48" data-r="6" data-c="1"/>
+        <rect class="blank" x="384" y="288" width="48" height="48" data-r="6" data-c="8"/>
+        <rect class="blank" x="432" y="288" width="48" height="48" data-r="6" data-c="9"/>
+        <rect class="blank" x="0" y="336" width="48" height="48" data-r="7" data-c="0"/>
+        <rect class="blank" x="48" y="336" width="48" height="48" data-r="7" data-c="1"/>
+        <rect class="blank" x="384" y="336" width="48" height="48" data-r="7" data-c="8"/>
+        <rect class="blank" x="432" y="336" width="48" height="48" data-r="7" data-c="9"/>
+        <rect class="blank" x="0" y="384" width="48" height="48" data-r="8" data-c="0"/>
+        <rect class="blank" x="0" y="432" width="48" height="48" data-r="9" data-c="0"/>
+        <rect class="blank" x="96" y="432" width="48" height="48" data-r="9" data-c="2"/>
+        <rect class="blank" x="336" y="432" width="48" height="48" data-r="9" data-c="7"/>
+        <rect class="blank" x="384" y="432" width="48" height="48" data-r="9" data-c="8"/>
+        <rect class="blank" x="432" y="432" width="48" height="48" data-r="9" data-c="9"/>
+        <rect class="blank" x="0" y="480" width="48" height="48" data-r="10" data-c="0"/>
+        <rect class="blank" x="48" y="480" width="48" height="48" data-r="10" data-c="1"/>
+        <rect class="blank" x="96" y="480" width="48" height="48" data-r="10" data-c="2"/>
+        <rect class="blank" x="144" y="480" width="48" height="48" data-r="10" data-c="3"/>
+        <rect class="blank" x="336" y="480" width="48" height="48" data-r="10" data-c="7"/>
+        <rect class="blank" x="384" y="480" width="48" height="48" data-r="10" data-c="8"/>
+        <rect class="blank" x="432" y="480" width="48" height="48" data-r="10" data-c="9"/>
+        <rect class="blank" x="0" y="528" width="48" height="48" data-r="11" data-c="0"/>
+        <rect class="blank" x="48" y="528" width="48" height="48" data-r="11" data-c="1"/>
+        <rect class="blank" x="96" y="528" width="48" height="48" data-r="11" data-c="2"/>
+        <rect class="blank" x="144" y="528" width="48" height="48" data-r="11" data-c="3"/>
+        <rect class="blank" x="192" y="528" width="48" height="48" data-r="11" data-c="4"/>
+        <rect class="blank" x="384" y="528" width="48" height="48" data-r="11" data-c="8"/>
+        <rect class="blank" x="432" y="528" width="48" height="48" data-r="11" data-c="9"/>
+      </g>
+      <g id="cells">
+        <rect class="cell" id="cell-0" x="192" y="0" width="48" height="48" data-r="0" data-c="4"/>
+        <rect class="cell" id="cell-1" x="240" y="0" width="48" height="48" data-r="0" data-c="5"/>
+        <rect class="cell" id="cell-2" x="144" y="48" width="48" height="48" data-r="1" data-c="3"/>
+        <rect class="cell" id="cell-3" x="192" y="48" width="48" height="48" data-r="1" data-c="4"/>
+        <rect class="cell" id="cell-4" x="240" y="48" width="48" height="48" data-r="1" data-c="5"/>
+        <rect class="cell" id="cell-5" x="96" y="96" width="48" height="48" data-r="2" data-c="2"/>
+        <rect class="cell" id="cell-6" x="144" y="96" width="48" height="48" data-r="2" data-c="3"/>
+        <rect class="cell" id="cell-7" x="192" y="96" width="48" height="48" data-r="2" data-c="4"/>
+        <rect class="cell" id="cell-8" x="240" y="96" width="48" height="48" data-r="2" data-c="5"/>
+        <rect class="cell" id="cell-9" x="288" y="96" width="48" height="48" data-r="2" data-c="6"/>
+        <rect class="cell" id="cell-10" x="48" y="144" width="48" height="48" data-r="3" data-c="1"/>
+        <rect class="cell" id="cell-11" x="96" y="144" width="48" height="48" data-r="3" data-c="2"/>
+        <rect class="cell" id="cell-12" x="144" y="144" width="48" height="48" data-r="3" data-c="3"/>
+        <rect class="cell" id="cell-13" x="192" y="144" width="48" height="48" data-r="3" data-c="4"/>
+        <rect class="cell" id="cell-14" x="240" y="144" width="48" height="48" data-r="3" data-c="5"/>
+        <rect class="cell" id="cell-15" x="288" y="144" width="48" height="48" data-r="3" data-c="6"/>
+        <rect class="cell" id="cell-16" x="336" y="144" width="48" height="48" data-r="3" data-c="7"/>
+        <rect class="cell" id="cell-17" x="0" y="192" width="48" height="48" data-r="4" data-c="0"/>
+        <rect class="cell" id="cell-18" x="48" y="192" width="48" height="48" data-r="4" data-c="1"/>
+        <rect class="cell" id="cell-19" x="96" y="192" width="48" height="48" data-r="4" data-c="2"/>
+        <rect class="cell" id="cell-20" x="144" y="192" width="48" height="48" data-r="4" data-c="3"/>
+        <rect class="cell" id="cell-21" x="192" y="192" width="48" height="48" data-r="4" data-c="4"/>
+        <rect class="cell" id="cell-22" x="240" y="192" width="48" height="48" data-r="4" data-c="5"/>
+        <rect class="cell" id="cell-23" x="288" y="192" width="48" height="48" data-r="4" data-c="6"/>
+        <rect class="cell" id="cell-24" x="48" y="240" width="48" height="48" data-r="5" data-c="1"/>
+        <rect class="cell" id="cell-25" x="96" y="240" width="48" height="48" data-r="5" data-c="2"/>
+        <rect class="cell" id="cell-26" x="144" y="240" width="48" height="48" data-r="5" data-c="3"/>
+        <rect class="cell" id="cell-27" x="192" y="240" width="48" height="48" data-r="5" data-c="4"/>
+        <rect class="cell" id="cell-28" x="240" y="240" width="48" height="48" data-r="5" data-c="5"/>
+        <rect class="cell" id="cell-29" x="288" y="240" width="48" height="48" data-r="5" data-c="6"/>
+        <rect class="cell" id="cell-30" x="336" y="240" width="48" height="48" data-r="5" data-c="7"/>
+        <rect class="cell" id="cell-31" x="96" y="288" width="48" height="48" data-r="6" data-c="2"/>
+        <rect class="cell" id="cell-32" x="144" y="288" width="48" height="48" data-r="6" data-c="3"/>
+        <rect class="cell" id="cell-33" x="192" y="288" width="48" height="48" data-r="6" data-c="4"/>
+        <rect class="cell" id="cell-34" x="240" y="288" width="48" height="48" data-r="6" data-c="5"/>
+        <rect class="cell" id="cell-35" x="288" y="288" width="48" height="48" data-r="6" data-c="6"/>
+        <rect class="cell" id="cell-36" x="336" y="288" width="48" height="48" data-r="6" data-c="7"/>
+        <rect class="cell" id="cell-37" x="96" y="336" width="48" height="48" data-r="7" data-c="2"/>
+        <rect class="cell" id="cell-38" x="144" y="336" width="48" height="48" data-r="7" data-c="3"/>
+        <rect class="cell" id="cell-39" x="192" y="336" width="48" height="48" data-r="7" data-c="4"/>
+        <rect class="cell" id="cell-40" x="240" y="336" width="48" height="48" data-r="7" data-c="5"/>
+        <rect class="cell" id="cell-41" x="288" y="336" width="48" height="48" data-r="7" data-c="6"/>
+        <rect class="cell" id="cell-42" x="336" y="336" width="48" height="48" data-r="7" data-c="7"/>
+        <rect class="cell" id="cell-43" x="48" y="384" width="48" height="48" data-r="8" data-c="1"/>
+        <rect class="cell" id="cell-44" x="96" y="384" width="48" height="48" data-r="8" data-c="2"/>
+        <rect class="cell" id="cell-45" x="144" y="384" width="48" height="48" data-r="8" data-c="3"/>
+        <rect class="cell" id="cell-46" x="192" y="384" width="48" height="48" data-r="8" data-c="4"/>
+        <rect class="cell" id="cell-47" x="240" y="384" width="48" height="48" data-r="8" data-c="5"/>
+        <rect class="cell" id="cell-48" x="288" y="384" width="48" height="48" data-r="8" data-c="6"/>
+        <rect class="cell" id="cell-49" x="336" y="384" width="48" height="48" data-r="8" data-c="7"/>
+        <rect class="cell" id="cell-50" x="384" y="384" width="48" height="48" data-r="8" data-c="8"/>
+        <rect class="cell" id="cell-51" x="432" y="384" width="48" height="48" data-r="8" data-c="9"/>
+        <rect class="cell" id="cell-52" x="48" y="432" width="48" height="48" data-r="9" data-c="1"/>
+        <rect class="cell" id="cell-53" x="144" y="432" width="48" height="48" data-r="9" data-c="3"/>
+        <rect class="cell" id="cell-54" x="192" y="432" width="48" height="48" data-r="9" data-c="4"/>
+        <rect class="cell" id="cell-55" x="240" y="432" width="48" height="48" data-r="9" data-c="5"/>
+        <rect class="cell" id="cell-56" x="288" y="432" width="48" height="48" data-r="9" data-c="6"/>
+        <rect class="cell" id="cell-57" x="192" y="480" width="48" height="48" data-r="10" data-c="4"/>
+        <rect class="cell" id="cell-58" x="240" y="480" width="48" height="48" data-r="10" data-c="5"/>
+        <rect class="cell" id="cell-59" x="288" y="480" width="48" height="48" data-r="10" data-c="6"/>
+        <rect class="cell" id="cell-60" x="240" y="528" width="48" height="48" data-r="11" data-c="5"/>
+        <rect class="cell" id="cell-61" x="288" y="528" width="48" height="48" data-r="11" data-c="6"/>
+        <rect class="cell" id="cell-62" x="336" y="528" width="48" height="48" data-r="11" data-c="7"/>
+      </g>
+    </svg>
+  </div>
+
+  <section class="dist" aria-label="顏色分佈">
+    <div class="bar" id="bar"><span style="background:var(--c0)"></span><span style="background:var(--c1)"></span><span style="background:var(--c2)"></span><span style="background:var(--c3)"></span><span style="background:var(--c4)"></span><i class="ticks"></i></div>
+    <div class="legend" id="legend"></div>
+    <p class="hint" id="hint">目標：每色 12～13 格</p>
+  </section>
+
+  <div class="actions">
+    <button class="btn primary" id="submitBtn" hidden>我想直接看市民反應了！</button>
+    <button class="btn" id="restartBtn">換一張地圖</button>
+  </div>
+
+  <footer>
+    本遊戲由支持者自製，非蔣萬安競選團隊官方網站。<br>
+    政見內容取自「Taipei N.E.W.S.」競選影片說明。
+  </footer>
+</main>
+
+<div class="modal" id="startPanel">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="開始遊戲">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" type="button">玩法說明</button>
+      <button class="tab" role="tab" type="button">我的紀錄</button>
+    </div>
+    <div class="pager">
+      <div class="track">
+        <section class="page" role="tabpanel">
+          <h2 class="page-title">來創造屬於你的台北吧！</h2>
+          <ol class="steps">
+            <li><b>1</b><span>點一格，它和上下左右的格子都會換成下一個顏色，綠色之後再回到黑色：</span>
+              <ul class="palette">
+                <li><i style="background:var(--c0)"></i><span><b>黑色</b>　擁有無限可能的城市！</span></li>
+                <li><i style="background:var(--c1)"></i><span><b>藍色</b>　邁向 AI 科技新時代！</span></li>
+                <li><i style="background:var(--c2)"></i><span><b>紅色</b>　充滿日夜動能活力！</span></li>
+                <li><i style="background:var(--c3)"></i><span><b>黃色</b>　世界級門戶接軌國際！</span></li>
+                <li><i style="background:var(--c4)"></i><span><b>綠色</b>　文化、自然、宜居的環境！</span></li>
+              </ul>
+            </li>
+            <li><b>2</b><span>規劃市政不能太偏向某個目標，顏色分佈越平均，市民越滿意。</span></li>
+            <li><b>3</b><span>市民也不喜歡你太善變，點得越少，滿意度越高。15 秒後就可以問市民滿不滿意你的規劃！</span></li>
+          </ol>
+          <p class="seed-note" id="seedNote" hidden>這是朋友分享的盤面，你們玩的是同一張地圖。</p>
+        </section>
+        <section class="page" role="tabpanel">
+          <h2 class="page-title">我的最佳紀錄</h2>
+          <ol class="record-list"></ol>
+        </section>
+      </div>
+    </div>
+    <div class="sheet-foot actions"><button class="btn primary" id="startBtn" type="button">開始規劃</button></div>
+  </div>
+</div>
+
+<div class="modal" id="resultModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="規劃結果">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" type="button">結果</button>
+      <button class="tab" role="tab" type="button">分享</button>
+      <button class="tab" role="tab" type="button">我的紀錄</button>
+    </div>
+    <div class="pager">
+      <div class="track">
+        <section class="page" role="tabpanel">
+          <div class="result-head">
+            <div>
+              <p>市民滿意度</p>
+              <div class="big-grade" id="resultGrade">滿意</div>
+            </div>
+            <div class="result-stats">
+              <div><b id="resultSteps">0</b><span>點擊</span></div>
+              <div><b id="resultTime">0</b><span>秒</span></div>
+            </div>
+          </div>
+          <p class="note" id="resultNote"></p>
+          <div class="policy">
+            <div class="area"><i class="dot" id="policyDot"></i><span id="policyArea"></span></div>
+            <h3 id="policyTitle"></h3>
+            <p id="policyText"></p>
+            <p class="why" id="policyWhy"></p>
+            <button class="link-btn" id="rerollBtn" type="button">換一則政見</button>
+          </div>
+          <div class="actions"><button class="btn primary" id="toShareBtn" type="button">分享我的台北</button></div>
+        </section>
+        <section class="page" role="tabpanel">
+          <figure class="preview">
+            <div class="preview-box"><img id="shareImg" alt="你的台北色彩分享圖片" hidden></div>
+            <figcaption id="shareImgNote">正在產生圖片…</figcaption>
+          </figure>
+          <div class="share-row">
+            <button class="btn primary" id="shareImgBtn" type="button" hidden>分享圖片</button>
+            <button class="btn" id="saveImgBtn" type="button">儲存圖片</button>
+          </div>
+          <p class="share-label">分享挑戰連結，朋友會拿到同一張地圖</p>
+          <div class="share-grid">
+            <a class="share-link" id="shareThreads" target="_blank" rel="noopener">Threads</a>
+            <a class="share-link" id="shareFacebook" target="_blank" rel="noopener">Facebook</a>
+            <a class="share-link" id="shareX" target="_blank" rel="noopener">X</a>
+            <a class="share-link" id="shareLine" target="_blank" rel="noopener">LINE</a>
+            <button class="share-link" id="copyBtn" type="button">複製連結</button>
+          </div>
+        </section>
+        <section class="page" role="tabpanel">
+          <h2 class="page-title">我的最佳紀錄</h2>
+          <ol class="record-list"></ol>
+        </section>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <p class="toast" id="toast" aria-live="polite"></p>
+      <div class="actions"><button class="btn" id="againBtn" type="button">再玩一次！</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
