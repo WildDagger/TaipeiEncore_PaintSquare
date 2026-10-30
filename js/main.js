@@ -10,11 +10,11 @@ const CONFIG = {
 // 陣列順序依 N.E.W.S.：0 黑（整體）、1 藍（北）、2 紅（東）、3 黃（西）、4 綠（南）
 // 點擊時 index + 1 循環；要和 CSS 的 --c0～--c4 保持同一順序
 const COLORS = [
-  { name: '黑', hex: '#000000' },
-  { name: '藍', hex: '#004da1' },
-  { name: '紅', hex: '#e50011' },
-  { name: '黃', hex: '#ffe100' },
-  { name: '綠', hex: '#44b034' },
+  { name: '黑', hex: '#242830' },
+  { name: '藍', hex: '#3975a5' },
+  { name: '紅', hex: '#d65c60' },
+  { name: '黃', hex: '#e4c45f' },
+  { name: '綠', hex: '#66a782' },
 ];
 const POLICIES = [
   { area: '全台北', tag: 'TAIPEI N.E.W.S.', title: '讓台北更 New、更好',
@@ -30,31 +30,33 @@ const POLICIES = [
 ];
 // 等級代碼只在程式和 localStorage 裡使用，畫面上顯示的是市民的反應
 const GRADE_LABELS = {
-  'SS+': '你是神啊！',
+  'SS+': '你是神啊？',
   'SS': '非常滿意',
   'S': '滿意',
   'A': '還算滿意',
-  'B': '普通',
-  'C': '不太滿意',
-  'D': '不滿意',
+  'B': '普普通通',
+  'C': '不是很滿意',
+  'D': '實在不滿意',
   'E': '非常不滿意',
 };
 function gradeLabel(grade) { return GRADE_LABELS[grade] || grade; }
+// 分享頁 share/<slug>.html，要和 tools/build_share_pages.py 一致
+const GRADE_SLUGS = { 'SS+': 'ss-plus', 'SS': 'ss', 'S': 's', 'A': 'a', 'B': 'b', 'C': 'c', 'D': 'd', 'E': 'e' };
 // 市民的反應：前半句看「偏不偏」，太善變時再補一句
 const CITIZEN_VOICE = {
-  'SS+': '每個方向都照顧到了，又幾乎沒有多餘的改動，市民對你五體投地。',
-  'SS': '市民很滿意城市的均衡發展。',
-  'S': '市民大致滿意，每個方向都有照顧到。',
-  'A': '市民覺得還不錯，只是有一兩個方向稍微被冷落了。',
-  'B': '市民覺得規劃有點偏，部分地區的聲音沒被聽見。',
-  'C': '不少市民覺得資源分配不太平均。',
-  'D': '市民開始抱怨城市發展太偏了。',
+  'SS+': '每個方向都照顧到了，又幾乎沒有多餘的改動，市民對你五體投地，為你高歌「安可」！',
+  'SS': '市民很滿意城市的均衡發展，也許您有當市長的才華喔！',
+  'S': '市民大致滿意，每個方向都有照顧到，當然這些滿意是放心裡的，勇敢講出來更好，您說是吧？',
+  'A': '市民覺得還不錯，只是還有改善空間，但沒關係，默默做正事就該被看到，為你加油！',
+  'B': '市民覺得規劃稍微有點偏，之後再努力看看，一定有機會讓評價更好！',
+  'C': '不少市民覺得規劃有待改善，是不是因為你用了太多很漂亮的抽象名詞打高空？',
+  'D': '市民抱怨聲四起，覺得你的規劃很糟糕。但，這應該不是因為市民配不上你的才智，對吧？',
   'E': '市民很不滿意，城市發展嚴重失衡！',
 };
 // 點擊數超過參考步數 2 倍時補一句；好評用「不過」轉折，負評用「而且」加重
 function citizenComment(grade, steps, ref) {
   if (grade === 'SS+' || steps <= ref * 2) return CITIZEN_VOICE[grade];
-  const joint = ['SS', 'S', 'A'].includes(grade) ? '不過' : '而且';
+  const joint = ['SS', 'S', 'A', 'B'].includes(grade) ? '不過' : '而且';
   return CITIZEN_VOICE[grade] + joint + '大家也覺得你改來改去，有點善變。';
 }
 
@@ -243,6 +245,14 @@ if (typeof document !== 'undefined') (function () {
   function setUrlSeed(seed) {
     try { const u = new URL(location.href); u.searchParams.set('seed', seed); history.replaceState(null, '', u); } catch (e) {}
   }
+  // 分享用的連結：先到評價分享頁（讓社群平台抓到對應圖片），再自動跳回遊戲
+  function shareLink(seed, grade) {
+    try {
+      const u = new URL(`share/${GRADE_SLUGS[grade] || 'e'}.html`, location.href);
+      u.search = ''; u.hash = ''; u.searchParams.set('seed', seed);
+      return u.href;
+    } catch (e) { return challengeUrl(seed); }
+  }
   function challengeUrl(seed) {
     try { const u = new URL(location.href); u.search = ''; u.hash = ''; u.searchParams.set('seed', seed); return u.href; }
     catch (e) { return location.href; }
@@ -416,16 +426,16 @@ if (typeof document !== 'undefined') (function () {
     const ctx = cv.getContext('2d');
     const body = '"TASA Explorer", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif';
     const disp = '"TASA Explorer", "Noto Sans TC", sans-serif';
-    ctx.fillStyle = '#f2f4f7'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#eaf3fa'; ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = '#5b6574'; ctx.font = `700 30px ${disp}`; ctx.fillText('TAIPEI N.E.W.S.', 72, 104);
-    ctx.fillStyle = '#14181f'; ctx.font = `900 64px ${body}`; ctx.fillText('我的台北色彩', 72, 178);
+    ctx.fillStyle = '#587087'; ctx.font = `700 30px ${disp}`; ctx.fillText('TAIPEI N.E.W.S.', 72, 104);
+    ctx.fillStyle = '#1c2b3a'; ctx.font = `900 64px ${body}`; ctx.fillText('我的台北色彩', 72, 178);
 
     // 地圖
     const rows = +board.dataset.rows, cols = +board.dataset.cols;
     const size = 58, bx = 72, by = 240;
     board.querySelectorAll('.blank').forEach(el => {
-      ctx.fillStyle = '#e2e6ec'; roundRect(ctx, bx + el.dataset.c * size + 3, by + el.dataset.r * size + 3, size - 6, size - 6, 9); ctx.fill();
+      ctx.fillStyle = '#d8e7f3'; roundRect(ctx, bx + el.dataset.c * size + 3, by + el.dataset.r * size + 3, size - 6, size - 6, 9); ctx.fill();
     });
     cellEls.forEach((el, i) => {
       ctx.fillStyle = COLORS[game.state[i]].hex; roundRect(ctx, bx + el.dataset.c * size + 3, by + el.dataset.r * size + 3, size - 6, size - 6, 9); ctx.fill();
@@ -433,20 +443,20 @@ if (typeof document !== 'undefined') (function () {
 
     // 右欄：評價與數據
     const rx = bx + cols * size + 40;
-    ctx.fillStyle = '#5b6574'; ctx.font = `500 26px ${body}`; ctx.fillText('市民滿意度', rx, 290);
-    ctx.fillStyle = '#14181f';
+    ctx.fillStyle = '#587087'; ctx.font = `500 26px ${body}`; ctx.fillText('市民滿意度', rx, 290);
+    ctx.fillStyle = '#1c2b3a';
     const label = gradeLabel(game.grade), maxW = W - 72 - rx;
     let fs = 76;
     do { ctx.font = `900 ${fs}px ${body}`; fs -= 2; } while (ctx.measureText(label).width > maxW && fs > 30);
     ctx.fillText(label, rx, 400);
     ctx.font = `700 54px ${disp}`; ctx.fillText(String(game.steps), rx, 530);
-    ctx.fillStyle = '#5b6574'; ctx.font = `500 24px ${body}`; ctx.fillText('次點擊', rx, 566);
-    ctx.fillStyle = '#14181f'; ctx.font = `700 54px ${disp}`; ctx.fillText(game.time.toFixed(1), rx, 656);
-    ctx.fillStyle = '#5b6574'; ctx.font = `500 24px ${body}`; ctx.fillText('秒', rx, 692);
+    ctx.fillStyle = '#587087'; ctx.font = `500 24px ${body}`; ctx.fillText('次點擊', rx, 566);
+    ctx.fillStyle = '#1c2b3a'; ctx.font = `700 54px ${disp}`; ctx.fillText(game.time.toFixed(1), rx, 656);
+    ctx.fillStyle = '#587087'; ctx.font = `500 24px ${body}`; ctx.fillText('秒', rx, 692);
     game.counts.forEach((c, i) => {
       const y = 750 + i * 46;
       ctx.fillStyle = COLORS[i].hex; roundRect(ctx, rx, y, 28, 28, 6); ctx.fill();
-      ctx.fillStyle = '#14181f'; ctx.font = `700 26px ${body}`;
+      ctx.fillStyle = '#1c2b3a'; ctx.font = `700 26px ${body}`;
       ctx.fillText(`${Math.round(c / N * 100)}%`, rx + 42, y + 25);
     });
 
@@ -454,12 +464,12 @@ if (typeof document !== 'undefined') (function () {
     const p = POLICIES[game.policy], py = by + rows * size + 50;
     ctx.fillStyle = '#ffffff'; roundRect(ctx, 72, py, W - 144, H - py - 110, 24); ctx.fill();
     ctx.fillStyle = COLORS[game.policy].hex; roundRect(ctx, 108, py + 38, 26, 26, 6); ctx.fill();
-    ctx.fillStyle = '#5b6574'; ctx.font = `700 26px ${body}`; ctx.fillText(`${p.area}・${p.tag}`, 148, py + 61);
-    ctx.fillStyle = '#14181f'; ctx.font = `900 44px ${body}`; ctx.fillText(p.title, 108, py + 124);
+    ctx.fillStyle = '#587087'; ctx.font = `700 26px ${body}`; ctx.fillText(`${p.area}・${p.tag}`, 148, py + 61);
+    ctx.fillStyle = '#1c2b3a'; ctx.font = `900 44px ${body}`; ctx.fillText(p.title, 108, py + 124);
     ctx.font = `400 28px ${body}`;
     wrapText(ctx, p.text, W - 216).slice(0, 3).forEach((l, k) => ctx.fillText(l, 108, py + 176 + k * 42));
 
-    ctx.fillStyle = '#5b6574'; ctx.font = `400 22px ${body}`;
+    ctx.fillStyle = '#587087'; ctx.font = `400 22px ${body}`;
     ctx.fillText('支持者自製・非官方競選網站', 72, H - 52);
     ctx.textAlign = 'right'; ctx.fillText(`挑戰同一張地圖：盤面 ${game.seed}`, W - 72, H - 52);
     return cv;
@@ -480,7 +490,7 @@ if (typeof document !== 'undefined') (function () {
     $('shareImg').hidden = true; $('shareImg').removeAttribute('src');
     $('shareImgNote').textContent = '正在產生圖片…';
     $('shareImgBtn').hidden = !canShareFiles;
-    const url = challengeUrl(game.seed), text = shareText(), enc = encodeURIComponent;
+    const url = shareLink(game.seed, game.grade), text = shareText(), enc = encodeURIComponent;
     $('shareThreads').href = `https://www.threads.net/intent/post?text=${enc(text + ' ' + url)}`;
     $('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
     $('shareX').href = `https://twitter.com/intent/tweet?text=${enc(text)}&url=${enc(url)}`;
@@ -510,7 +520,7 @@ if (typeof document !== 'undefined') (function () {
     if (!blob) return;
     try {
       const file = new File([blob], shareFileName(), { type: 'image/png' });
-      await navigator.share({ files: [file], text: shareText() + ' ' + challengeUrl(game.seed) });
+      await navigator.share({ files: [file], text: shareText() + ' ' + shareLink(game.seed, game.grade) });
     } catch (e) {
       if (!e || e.name !== 'AbortError') $('toast').textContent = '分享沒有成功，可以改用「儲存圖片」。';
     }
@@ -526,7 +536,7 @@ if (typeof document !== 'undefined') (function () {
   });
 
   $('copyBtn').addEventListener('click', () => {
-    const url = challengeUrl(game.seed);
+    const url = shareLink(game.seed, game.grade);
     const done = () => { $('toast').textContent = '挑戰連結已複製，朋友會拿到同一張地圖。'; };
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(done, () => { $('toast').textContent = url; });
@@ -541,4 +551,4 @@ if (typeof document !== 'undefined') (function () {
   const urlSeed = readSeedFromUrl();
   setup(urlSeed || newSeed(), !!urlSeed);
   renderRecords();
-})();
+})();
