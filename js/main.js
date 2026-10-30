@@ -198,6 +198,8 @@ if (typeof document !== 'undefined') (function () {
   };
 
   let game = null, timer = null;
+  const SUBMIT_TEXT = { playing: $('submitBtn').textContent, done: '看市民滿意度' };
+  const RESTART_TEXT = { playing: $('restartBtn').textContent, done: '重啟遊戲' };
 
   /* ---------- 彈出卡片的分頁：點分頁、左右滑動、方向鍵都能切換 ---------- */
   function makePager(sheet, onChange) {
@@ -271,6 +273,8 @@ if (typeof document !== 'undefined') (function () {
     $('seedNote').hidden = !fromFriend;
     startPager.go(0, false);
     $('submitBtn').hidden = true;
+    $('submitBtn').textContent = SUBMIT_TEXT.playing;
+    $('restartBtn').textContent = RESTART_TEXT.playing;
     board.classList.remove('playing', 'locked');
   }
 
@@ -325,7 +329,10 @@ if (typeof document !== 'undefined') (function () {
     game.elapsed = Math.min(CONFIG.TIME_LIMIT, (performance.now() - game.startAt) / 1000);
     game.phase = 'done';
     board.classList.remove('playing'); board.classList.add('locked');
-    $('submitBtn').hidden = true;
+    // 結算後按鈕留著：關掉結果視窗後還能再叫出來
+    $('submitBtn').hidden = false;
+    $('submitBtn').textContent = SUBMIT_TEXT.done;
+    $('restartBtn').textContent = RESTART_TEXT.done;
 
     const counts = countColors(game.state);
     const time = Math.round(game.elapsed * 10) / 10;
@@ -357,9 +364,7 @@ if (typeof document !== 'undefined') (function () {
     $('toast').textContent = '';
     renderPolicy();
     resetShare();
-    $('resultModal').hidden = false;
-    resultPager.go(0, false);
-    $('toShareBtn').focus();
+    openResult();
   }
 
   function renderPolicy() {
@@ -544,7 +549,24 @@ if (typeof document !== 'undefined') (function () {
   });
 
   $('startBtn').addEventListener('click', start);
-  $('submitBtn').addEventListener('click', finish);
+  /* ---------- 結果視窗的開關 ---------- */
+  function openResult() {
+    $('toast').textContent = '';
+    $('resultModal').hidden = false;
+    resultPager.go(0, false);
+    $('toShareBtn').focus();
+  }
+  function closeResult() {
+    if ($('resultModal').hidden) return;
+    $('resultModal').hidden = true;
+    $('submitBtn').focus();
+  }
+  // 點視窗外的半透明區域或按 Esc 關閉，回去看自己的地圖
+  $('resultModal').addEventListener('click', e => { if (e.target === $('resultModal')) closeResult(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeResult(); });
+  $('closeResultBtn').addEventListener('click', closeResult);
+
+  $('submitBtn').addEventListener('click', () => { if (game.phase === 'done') openResult(); else finish(); });
   $('restartBtn').addEventListener('click', () => setup(newSeed(), false));
   $('againBtn').addEventListener('click', () => { $('resultModal').hidden = true; setup(newSeed(), false); });
 

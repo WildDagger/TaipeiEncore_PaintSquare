@@ -5,11 +5,12 @@
 
 /* 版面：單欄、手機優先；地圖是主角，上方狀態列、下方分佈條與紀錄 */
 :root {
-  /* 遊戲色（市徽原色，之後再統一降飽和） */
-  --c0: #000000; --c1: #004da1; --c2: #e50011; --c3: #ffe100; --c4: #44b034;
-  /* 介面中性色：略帶藍的灰，呼應市徽藍 */
-  --bg: #f2f4f7; --surface: #ffffff; --ink: #14181f; --muted: #5b6574;
-  --line: #d8dde5; --blank: #e2e6ec; --scrim: rgba(242, 244, 247, .92);
+  /* 遊戲色：降低飽和度的五色，順序 0 黑、1 藍（北）、2 紅（東）、3 黃（西）、4 綠（南） */
+  --c0: #242830; --c1: #3975a5; --c2: #d65c60; --c3: #e4c45f; --c4: #66a782;
+  /* 介面：淺天空藍調（刻意避開競選主視覺的飽和藍） */
+  --bg: #eaf3fa; --surface: #ffffff; --ink: #1c2b3a; --muted: #587087;
+  --line: #cfe0ee; --blank: #d8e7f3; --accent: #7fb6dd; --scrim: rgba(234, 243, 250, .92);
+  --cell-edge: transparent;
   --font-display: "TASA Explorer", "Noto Sans TC", "PingFang TC", sans-serif;
   --font-body: "TASA Explorer", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
   --radius: 14px;
@@ -17,13 +18,15 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #15181d; --surface: #1e2229; --ink: #eef1f5; --muted: #9aa4b1;
-    --line: #313744; --blank: #2a2f38; --scrim: rgba(21, 24, 29, .93); color-scheme: dark;
+    --bg: #0f1a24; --surface: #172533; --ink: #e8f1f8; --muted: #8fa7bc;
+    --line: #26394b; --blank: #223445; --accent: #6fa9d6; --scrim: rgba(15, 26, 36, .93);
+    --cell-edge: rgba(255, 255, 255, .22); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #15181d; --surface: #1e2229; --ink: #eef1f5; --muted: #9aa4b1;
-  --line: #313744; --blank: #2a2f38; --scrim: rgba(21, 24, 29, .93); color-scheme: dark;
+  --bg: #0f1a24; --surface: #172533; --ink: #e8f1f8; --muted: #8fa7bc;
+  --line: #26394b; --blank: #223445; --accent: #6fa9d6; --scrim: rgba(15, 26, 36, .93);
+  --cell-edge: rgba(255, 255, 255, .22); color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -42,14 +45,14 @@ body {
 .top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 12px; }
 .eyebrow { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: .12em; color: var(--muted); }
 h1 { margin: 0; font-size: 24px; text-wrap: balance; font-weight: 900; line-height: 1.2; letter-spacing: .04em; }
-.tag { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.tag { font-size: 12px; color: var(--muted); border: 1px solid var(--accent); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
 
 /* 狀態列 */
 .hud { display: grid; grid-template-columns: 1fr 1fr 1.6fr; gap: 8px; }
 .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 12px 8px; display: grid; }
 .stat .label { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
 .stat .value { font-family: var(--font-display); font-weight: 700; font-size: 32px; line-height: 1.05; font-variant-numeric: tabular-nums; }
-.stat.time.low .value { color: var(--c1); }
+.stat.time.low .value { color: var(--c2); }
 .stat .grade-value { font-family: var(--font-body); font-weight: 900; font-size: 22px; line-height: 34px; white-space: nowrap; letter-spacing: .02em; }
 /* 最高與最低兩級用顏色強調 */
 [data-grade="SS+"] { color: var(--c2); }
@@ -61,7 +64,7 @@ h1 { margin: 0; font-size: 24px; text-wrap: balance; font-weight: 900; line-heig
 #board rect { transform-box: fill-box; transform-origin: center; transform: scale(.88); }
 #board .blank { fill: var(--blank); }
 #board .cell { cursor: pointer; transition: fill .18s ease, transform .15s ease; }
-#board .cell.c0 { fill: var(--c0); } #board .cell.c1 { fill: var(--c1); }
+#board .cell.c0 { fill: var(--c0); stroke: var(--cell-edge); stroke-width: 2; } #board .cell.c1 { fill: var(--c1); }
 #board .cell.c2 { fill: var(--c2); } #board .cell.c3 { fill: var(--c3); }
 #board .cell.c4 { fill: var(--c4); }
 #board .cell.bump { animation: bump .22s ease; }
@@ -85,7 +88,7 @@ h1 { margin: 0; font-size: 24px; text-wrap: balance; font-weight: 900; line-heig
   border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer;
 }
 .btn.primary { background: var(--ink); color: var(--bg); }
-.btn:focus-visible { outline: 3px solid var(--c4); outline-offset: 2px; }
+.btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .btn:disabled { opacity: .45; cursor: default; }
 .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
@@ -134,7 +137,7 @@ footer { font-size: 12px; color: var(--muted); text-align: center; line-height: 
   border-radius: 999px; padding: 6px 8px; cursor: pointer; transition: background .2s, color .2s;
 }
 .tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
-.tab:focus-visible { outline: 3px solid var(--c1); outline-offset: 1px; }
+.tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
 .pager { overflow: hidden; transition: height .3s ease; }
 .track { display: flex; align-items: flex-start; transition: transform .3s ease; touch-action: pan-y; }
 .page { flex: 0 0 100%; min-width: 0; padding: 2px 20px; display: grid; gap: 14px; }
@@ -157,7 +160,7 @@ footer { font-size: 12px; color: var(--muted); text-align: center; line-height: 
   font: inherit; font-size: 15px; font-weight: 700; text-align: center; text-decoration: none; color: var(--ink);
   background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px; cursor: pointer;
 }
-.share-link:focus-visible { outline: 3px solid var(--c1); outline-offset: 2px; }
+.share-link:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (hover: hover) { .share-link:hover { border-color: var(--ink); } }
 
 .result-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
@@ -183,3 +186,5 @@ footer { font-size: 12px; color: var(--muted); text-align: center; line-height: 
 .note { margin: 0; font-size: 15px; }
 .result-head .lead { margin: 0 0 2px; font-size: 13px; color: var(--muted); }
 .toast:empty { display: none; }
+/* 深色模式下替黑色加細邊，避免和背景融在一起 */
+.legend .sw, .bar span:first-child { box-shadow: inset 0 0 0 1px var(--cell-edge); }
